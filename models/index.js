@@ -64,12 +64,29 @@ module.exports = {
         if (err) throw err;
       });
     },
-    post: ({name, email}, cb) => {
-      let student = new Student ({
-        name,
-        email
-    }).save()
-    cb();
+    post: ({name, email, classes}, cb) => {
+      let confirmedClasses = [];
+      let count = 0
+
+      //checks for class existence in db
+      //in the future would we want to let user know of
+      //non-existent class id ?
+      classes.forEach( (classId) => {
+        Class.findOne({_id: classId }).then( (_class) => {
+          if (_class) {
+            confirmedClasses.push(_class._id);
+          }
+          count++
+          if (count === classes.length) {
+            let student = new Student ({
+              name,
+              email,
+              classes: confirmedClasses
+            }).save()
+            cb();
+          }
+        });
+      });
     }
   },
   classes: {

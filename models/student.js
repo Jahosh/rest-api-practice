@@ -7,6 +7,7 @@ autoIncrement.initialize(connection);
 const studentSchema =  new Schema({
   name: {type: String, required: true },
   email: {type: String, required: true },
+  classes: { type: Array, default: [] }
 });
 
 

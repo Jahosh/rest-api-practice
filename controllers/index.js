@@ -67,8 +67,8 @@ module.exports = {
       });
     },
     post: (req, res) => {
-      let { name, email } = req.body;
-      models.students.post({ name, email }, () => {
+      let { name, email, classes } = req.body;
+      models.students.post({ name, email, classes }, () => {
         res.status(201).end(JSON.stringify({}))
       });
     }
