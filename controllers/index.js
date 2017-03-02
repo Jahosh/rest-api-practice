@@ -35,6 +35,18 @@ module.exports = {
         }
         res.send(payload);
       });
+    },
+    getById: (req, res) => {
+      let id = req.params.id;
+      models.students.getById(id, (student) => {
+        res.send(student);
+      });
+    },
+    post: (req, res) => {
+      let { name, email } = req.body;
+      models.students.post({ name, email }, () => {
+        res.status(201).end(JSON.stringify({}))
+      });
     }
   }
 }

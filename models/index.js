@@ -50,8 +50,25 @@ module.exports = {
       });
 
     },
-    post: () => {
-
+    getById: (id, cb) => {
+      let student = Student.findOne({'_id': id }).then( (student) =>{
+        if (!student) {
+          let msg = `no student found with id of ${id}`;
+          return cb(JSON.stringify(msg));
+        }
+        let studentJson = _.pick(student, ['_id', 'name', 'email']);
+        cb(studentJson);
+      })
+      .catch( (err) => {
+        if (err) throw err;
+      });
+    },
+    post: ({name, email}, cb) => {
+      let student = new Student ({
+        name,
+        email
+    }).save()
+    cb();
     }
   }
 }

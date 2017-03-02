@@ -13,11 +13,5 @@ const studentSchema =  new Schema({
 studentSchema.plugin(autoIncrement.plugin, 'Student');
 const Student = connection.model('Student',studentSchema);
 
-let student = new Student ({
-  name: 'Josh',
-  email: 'josh91hickman@gmail.com'
-});
-
-student.save();
 
 module.exports = Student;

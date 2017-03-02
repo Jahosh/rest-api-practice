@@ -13,23 +13,4 @@ const teacherSchema =  new Schema({
 teacherSchema.plugin(autoIncrement.plugin, 'Teacher');
 const Teacher = connection.model('Teacher', teacherSchema)
 
-
-/*
- * Seed Database
- * 
-*/
-
-let teachers = seedData.teachers;
-
-// teachers.forEach( (teacher) => {
-//   let data = new Teacher({
-//     name: teacher.name,
-//     email: teacher.email
-//   });
-//   data.save();
-// })
-
-
-
-
 module.exports = Teacher;
