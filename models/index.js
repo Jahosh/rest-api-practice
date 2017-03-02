@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Teacher = require('./teacher');
 const Student = require('./student');
+const Class = require('./class');
 const _ = require('lodash');
 
 module.exports = {
@@ -69,6 +70,39 @@ module.exports = {
         email
     }).save()
     cb();
+    }
+  },
+  classes: {
+    get: (cb) => {
+      let classes = Class.find({}).then((classes) => {
+        let finalJson = classes.map( (_class) => {
+          return _.pick(_class, ['_id', 'code', 'name']);
+        });
+        cb(finalJson);
+      })
+      .catch((err) => {
+          throw err;
+      });
+    },
+    getById: (id, cb) => {
+      let foundClass = Class.findOne({ '_id': id }).then((_class) => {
+        if (!_class) {
+          let msg = `no class found with id of ${id}`;
+          return cb(JSON.stringify(msg));
+        }
+        let classJson = _.pick(_class, ['_id', 'code', 'name']);
+        cb(classJson);
+      })
+        .catch((err) => {
+          if (err) throw err;
+        });
+    },
+    post: ({code, name}, cb) => {
+      let _class = new Class ({
+        code,
+        name
+      }).save()
+      cb();
     }
   }
 }
