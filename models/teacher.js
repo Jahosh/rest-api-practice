@@ -2,10 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const autoIncrement = require('mongoose-auto-increment');
 const seedData = require('../seed.js');
+const connection = require('../db/db');
 
-const connection = mongoose.createConnection('mongodb://127.0.0.1/api');
 autoIncrement.initialize(connection);
-
 const teacherSchema =  new Schema({
   name: {type: String, required: true },
   email: {type: String, required: true },

@@ -24,5 +24,17 @@ module.exports = {
         res.status(201).end(JSON.stringify({}));
       });
     }
+  },
+  students: {
+    get: (req, res) => {
+      models.students.get( (students) => {
+          let payload = {
+          success: true,
+          err: null,
+          students,
+        }
+        res.send(payload);
+      });
+    }
   }
 }

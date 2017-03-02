@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Teacher = require('./teacher');
+const Student = require('./student');
 const _ = require('lodash');
 
 module.exports = {
@@ -10,9 +11,10 @@ module.exports = {
           return _.pick(teacher, ['_id', 'name', 'email']);
         });
         cb(finalJson);
-        }).catch((err) => {
+      })
+      .catch((err) => {
           throw err;
-        });
+      });
     },
     getById: (id, cb) => {
       let teacher = Teacher.findOne({'_id': id }).then( (teacher) =>{
@@ -23,9 +25,9 @@ module.exports = {
         let teacherJson = _.pick(teacher, ['_id', 'name', 'email']);
         cb(teacherJson);
       })
-        .catch( (err) => {
-          if (err) throw err;
-        });
+      .catch( (err) => {
+        if (err) throw err;
+      });
     },
     post: ({name, email}, cb) => {
       let teacher = new Teacher({
@@ -33,6 +35,23 @@ module.exports = {
         email
       }).save()
       cb();
+    }
+  },
+  students: {
+    get: (cb) => {
+      let students = Student.find({}).then( (students) => {
+        let finalJson = students.map( (student) => {
+           return _.pick(student, ['_id', 'name', 'email']);
+        });
+        cb(finalJson);
+      })
+      .catch( (err) => {
+        if (err) throw err;
+      });
+
+    },
+    post: () => {
+
     }
   }
 }
