@@ -8,46 +8,50 @@ module.exports = {
   teachers: {
     get: (cb) => {
       let teachers = Teacher.find({}).then((teachers) => {
-        let finalJson = teachers.map( (teacher) => {
+        let teacherJson = teachers.map( (teacher) => {
           return _.pick(teacher, ['_id', 'name', 'email']);
         });
-        cb(finalJson);
+        cb(null, teacherJson);
       })
       .catch((err) => {
-          throw err;
+        cb(err, null);
       });
     },
     getById: (id, cb) => {
       let teacher = Teacher.findOne({'_id': id }).then( (teacher) =>{
         if (!teacher) {
-          let msg = `no user found with id of ${id}`;
-          return cb(JSON.stringify(msg));
+          let msg = `no teacher found with id of ${id}`;
+          return cb(msg, null);
         }
         let teacherJson = _.pick(teacher, ['_id', 'name', 'email']);
-        cb(teacherJson);
+        cb(null, teacherJson);
       })
       .catch( (err) => {
-        if (err) throw err;
+        cb(err, null);
       });
     },
     post: ({name, email}, cb) => {
       let teacher = new Teacher({
         name,
         email
-      }).save()
-      cb();
+      }).save( (err, teacherRecord) => {
+        if (err) {
+          cb(err, null);
+        }
+        cb(null, teacherRecord._id);
+      });
     }
   },
   students: {
     get: (cb) => {
       let students = Student.find({}).then( (students) => {
         let finalJson = students.map( (student) => {
-           return _.pick(student, ['_id', 'name', 'email']);
+           return _.pick(student, ['_id', 'name', 'email', 'classes']);
         });
-        cb(finalJson);
+        cb(null, finalJson);
       })
       .catch( (err) => {
-        if (err) throw err;
+        cb(err, null);
       });
 
     },
@@ -55,18 +59,31 @@ module.exports = {
       let student = Student.findOne({'_id': id }).then( (student) =>{
         if (!student) {
           let msg = `no student found with id of ${id}`;
-          return cb(JSON.stringify(msg));
+          return cb(msg, null);
         }
-        let studentJson = _.pick(student, ['_id', 'name', 'email']);
-        cb(studentJson);
+        let studentJson = _.pick(student, ['_id', 'name', 'email', 'classes']);
+        cb(null, studentJson);
       })
       .catch( (err) => {
-        if (err) throw err;
+        cb(err, null);
       });
     },
-    post: ({name, email, classes}, cb) => {
+    post: ({name, email, classes=[] }, cb) => {
       let confirmedClasses = [];
       let count = 0
+
+      //Handle when no classes on initial submit
+      if (classes.length === 0) {
+        let student = new Student({
+          name,
+          email
+        }).save((err, student) => {
+          if (err) {
+            cb(err, null);
+          }
+          cb(null, student._id);
+        });
+      }
 
       //checks for class existence in db
       //in the future would we want to let user know of
@@ -82,8 +99,12 @@ module.exports = {
               name,
               email,
               classes: confirmedClasses
-            }).save()
-            cb();
+            }).save((err, student) => {
+              if (err) {
+                cb(err, null);
+              }
+              cb(null, student._id);
+            });
           }
         });
       });
@@ -92,34 +113,38 @@ module.exports = {
   classes: {
     get: (cb) => {
       let classes = Class.find({}).then((classes) => {
-        let finalJson = classes.map( (_class) => {
+        let classesJson = classes.map( (_class) => {
           return _.pick(_class, ['_id', 'code', 'name']);
         });
-        cb(finalJson);
+        cb(null, classesJson);
       })
       .catch((err) => {
-          throw err;
+          cb(err, null);
       });
     },
     getById: (id, cb) => {
       let foundClass = Class.findOne({ '_id': id }).then((_class) => {
         if (!_class) {
           let msg = `no class found with id of ${id}`;
-          return cb(JSON.stringify(msg));
+          return cb(msg, null);
         }
         let classJson = _.pick(_class, ['_id', 'code', 'name']);
-        cb(classJson);
+        cb(null, classJson);
       })
         .catch((err) => {
-          if (err) throw err;
+          cb(err, null);
         });
     },
     post: ({code, name}, cb) => {
       let _class = new Class ({
         code,
         name
-      }).save()
-      cb();
+      }).save((err, _class) => {
+        if (err) {
+          cb(err, null);
+        }
+        cb(null, _class._id);
+      });
     }
   }
 }
