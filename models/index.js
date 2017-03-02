@@ -27,8 +27,12 @@ module.exports = {
           if (err) throw err;
         });
     },
-    post: () => {
-
+    post: ({name, email}, cb) => {
+      let teacher = new Teacher({
+        name,
+        email
+      }).save()
+      cb();
     }
   }
 }
