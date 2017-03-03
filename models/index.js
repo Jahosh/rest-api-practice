@@ -108,6 +108,19 @@ module.exports = {
           }
         });
       });
+    },
+    editClasses: (classes, id, cb) => {
+      let student = Student.findOne({_id: id}).then( (student) => {
+        if (!student) {
+          let msg = `no student found with id of ${id}`;
+          return cb(msg, null);
+        }
+        student.update({$set: { classes: classes }}).then((stud, err) => {
+          cb(null, student._id);
+        }).catch( (err, student) => {
+          cb(err, null);
+        });
+      });
     }
   },
   classes: {

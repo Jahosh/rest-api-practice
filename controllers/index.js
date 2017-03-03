@@ -90,6 +90,22 @@ module.exports = {
         }
         res.status(201).end(JSON.stringify(payload));
       });
+    },
+    editClasses: (req, res) => {
+      let { classes } = req.body;
+      let { id } = req.params
+      if (!classes.length) {
+        let msg = `send a list of classes`;
+        res.send(JSON.stringify(msg));
+      }
+      models.students.editClasses(classes, id, (err, id) => {
+        let payload = {
+          success: err ? false : true,
+          id,
+          err: err
+        }
+        res.status(201).end(JSON.stringify(payload));
+      });
     }
   },
   classes: {
