@@ -53,7 +53,6 @@ module.exports = {
       .catch( (err) => {
         cb(err, null);
       });
-
     },
     getById: (id, cb) => {
       let student = Student.findOne({'_id': id }).then( (student) =>{

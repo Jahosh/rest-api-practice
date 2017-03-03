@@ -3,13 +3,10 @@ const clientController = require('./controllers/client');
 const router = require('express').Router();
 
 //Connect controller methods to their corresponding routes
-
 /*
  * CLIENT - ROUTES
  */
 router.get('/', clientController.get);
-
-
 
 /*
  * API - ROUTES

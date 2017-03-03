@@ -12,5 +12,4 @@ const classSchema =  new Schema({
 classSchema.plugin(autoIncrement.plugin, 'Class');
 const Class = connection.model('Class', classSchema);
 
-
 module.exports = Class;

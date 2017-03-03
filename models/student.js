@@ -10,9 +10,7 @@ const studentSchema =  new Schema({
   classes: { type: Array, default: [] }
 });
 
-
 studentSchema.plugin(autoIncrement.plugin, 'Student');
 const Student = connection.model('Student',studentSchema);
-
 
 module.exports = Student;
